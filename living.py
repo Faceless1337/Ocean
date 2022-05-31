@@ -3,25 +3,25 @@ from enum import Enum
 import random
 
 
-class Animals(Enum):
-    plankton = 0
-    dolphin = 1
-    shark = 2
-    killerwhale = 3
+class AnimalsType(Enum):
+    PLANKTON = 0
+    DOLPHIN = 1
+    SHARK = 2
+    KILLERWHALE = 3
     EMPTY = 4
 
 
 # ocean = np.empty((10, 10), dtype="object")
 
 
-class Living:
+class Animals:
     def __init__(self, size: int):
         self.x: int = None
         self.y: int = None
 
     # self.n = size
 
-    def getType(self) -> Animals:
+    def getType(self) -> AnimalsType:
         pass
 
     def next(self, paramOcean) -> []:
@@ -39,10 +39,10 @@ class Living:
     def getAge(self) -> int:
         return self.age
 
-    def getMale(self) -> bool:
+    def getSex(self) -> bool:
         return self.male
 
-    def randomMale(self) -> bool:
+    def randomSex(self) -> bool:
         return random.choice([True, False])
 
     def sum(self, paramOcean: [], sm: []) -> None:

@@ -1,73 +1,57 @@
-from animals import Empty
+from animals import FantomAnimal
 from animals import Plankton
 from animals import Killerwhale
 from animals import Shark
 from animals import Dolphin
-from living import Animals
+from living import AnimalsType
 import numpy as np
-
+import json
 
 class FileReader:
     @classmethod
     def saveToFile(cls, ocean: [[]]) -> None:
-        fout = open("state.txt", 'w')
-        fout.write(str(len(ocean)) + '\n')
+        fout = open('size.txt', 'w')
+        fout.write(str(len(ocean)))
+        fout.close()
+        data = {'Plankton': [], 'Shark': [], 'FantomAnimal': [], 'Killerwhale': [], 'Dolphin': []}
         for line in ocean:
             for animal in line:
-                fout.write(str(animal.getType()) + '\n')
-                if animal.getType() == Animals.plankton:
-                    fout.write(str(animal.getX()) + '\n')
-                    fout.write(str(animal.getY()) + '\n')
-                    fout.write(str(animal.getHp()) + '\n')
-                    fout.write(str(animal.getAge()) + '\n')
-                    continue
-                if animal.getType() == Animals.EMPTY:
-                    fout.write(str(animal.getX()) + '\n')
-                    fout.write(str(animal.getY()) + '\n')
-                    continue
-                fout.write(str(animal.getX()) + '\n')
-                fout.write(str(animal.getY()) + '\n')
-                fout.write(str(animal.getHp()) + '\n')
-                if animal.getMale():
-                    fout.write("male" + '\n')
-                else:
-                    fout.write("female" + '\n')
-                fout.write(str(animal.getAge()) + '\n')
-        fout.close()
+                if animal.getType() == AnimalsType.PLANKTON:
+                    data['Plankton'].append(animal.__dict__)
+                if animal.getType() == AnimalsType.EMPTY:
+                    data['FantomAnimal'].append(animal.__dict__)
+                if animal.getType() == AnimalsType.DOLPHIN:
+                    data['Dolphin'].append(animal.__dict__)
+                if animal.getType() == AnimalsType.SHARK:
+                    data['Shark'].append(animal.__dict__)
+                if animal.getType() == AnimalsType.KILLERWHALE:
+                    data['Killerwhale'].append(animal.__dict__)
+
+        with open('state.json', 'w') as outfile:
+            json.dump(data, outfile)
+
+
 
     @classmethod
-    def downloadFromFile(cls) -> [[]]:
-        fin = open("state.txt", 'r')
+    def loadFromFile(cls) -> [[]]:
+        fin = open("size.txt", 'r')
         try:
             size: int = int(fin.readline())
+            fin.close()
             ocean = np.empty((size, size), dtype="object")
-            for number in range(size * size):
-                typeOfAnimal: str = str(fin.readline())
-                x: int = int(fin.readline())
-                y: int = int(fin.readline())
-                if typeOfAnimal == "Animals.EMPTY" + '\n':
-                    ocean[x][y] = Empty(x, y)
-                    continue
-                if typeOfAnimal == "Animals.plankton" + '\n':
-                    hp: int = int(fin.readline())
-                    age: int = int(fin.readline())
-                    ocean[x][y] = Plankton(x, y, hp, age)
-                    continue
-                hp: int = int(fin.readline())
-                strMale: str = str(fin.readline())
-                male: bool = True
-                if strMale == "female":
-                    male = False
-                age: int = int(fin.readline())
-                if typeOfAnimal == "Animals.dolphin" + '\n':
-                    ocean[x][y] = Dolphin(x, y, hp, male, age)
-                    continue
-                if typeOfAnimal == "Animals.shark" + '\n':
-                    ocean[x][y] = Shark(x, y, hp, male, age)
-                    continue
-                if typeOfAnimal == "Animals.killerwhale" + '\n':
-                    ocean[x][y] = Killerwhale(x, y, hp, male, age)
-                    continue
+
+            with open('state.json') as infile:
+                data = json.load(infile)
+                for plankton in data['Plankton']:
+                    ocean[plankton['x']][plankton['y']] = Plankton(plankton['x'], plankton['y'], plankton['hp'], plankton['age'])
+                for fantomAnimal in data['FantomAnimal']:
+                    ocean[fantomAnimal['x']][fantomAnimal['y']] = FantomAnimal(fantomAnimal['x'], fantomAnimal['y'])
+                for dolphin in data['Dolphin']:
+                    ocean[dolphin['x']][dolphin['y']] = Dolphin(dolphin['x'], dolphin['y'], dolphin['hp'], dolphin['male'], dolphin['age'])
+                for shark in data['Shark']:
+                    ocean[shark['x']][shark['y']] = Shark(shark['x'], shark['y'], shark['hp'], shark['male'], shark['age'])
+                for killerwhale in data['Killerwhale']:
+                    ocean[killerwhale['x']][killerwhale['y']] = Killerwhale(killerwhale['x'], killerwhale['y'], killerwhale['hp'], killerwhale['male'], killerwhale['age'])
             return ocean
         except ValueError:
             print("Invalid file")

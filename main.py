@@ -1,6 +1,6 @@
-from living import Living
+from living import Animals
 import numpy as np
-from god import God
+from oceanController import OceanController
 from fileReader import FileReader
 
 try:
@@ -21,19 +21,19 @@ try:
             print("too much animals")
             exit(0)
         ocean = np.empty((size, size), dtype="object")
-        setattr(Living, 'n', size)
-        god = God(size)
-        god.init(ocean, amountOfPlanktons, amountOfDolphins, amountOfSharks, amountOfKillerwhales)
+        setattr(Animals, 'n', size)
+        oceanController = OceanController(size)
+        oceanController.init(ocean, amountOfPlanktons, amountOfDolphins, amountOfSharks, amountOfKillerwhales)
     if choice == 2:
         ocean = np.empty((11, 11), dtype="object")
-        setattr(Living, 'n', 11)
-        god = God(11)
-        god.init(ocean, 20, 10, 5, 5)
+        setattr(Animals, 'n', 11)
+        oceanController = OceanController(11)
+        oceanController.init(ocean, 20, 10, 5, 5)
     if choice == 3:
-        ocean = FileReader.downloadFromFile()
-        god = God(len(ocean))
-        setattr(Living, 'n', len(ocean))
-    god.showOcean(ocean)
+        ocean = FileReader.loadFromFile()
+        oceanController = OceanController(len(ocean))
+        setattr(Animals, 'n', len(ocean))
+    oceanController.showOcean(ocean)
     stepNumber: int = 1
     choice: int = 1
     while True:
@@ -46,16 +46,16 @@ try:
         if choice == 1:
             break
         if choice == 2:
-            god.update(ocean)
-            god.showOcean(ocean)
+            oceanController.update(ocean)
+            oceanController.showOcean(ocean)
             print("number of the step - ", stepNumber)
             stepNumber += 1
         if choice == 3:
-            god.addAnimal(ocean)
-            god.showOcean(ocean)
+            oceanController.addAnimal(ocean)
+            oceanController.showOcean(ocean)
         if choice == 4:
-            god.killAnimal(ocean)
-            god.showOcean(ocean)
+            oceanController.killAnimal(ocean)
+            oceanController.showOcean(ocean)
         if choice == 5:
             FileReader.saveToFile(ocean)
 except Exception:

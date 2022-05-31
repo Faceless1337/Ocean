@@ -1,42 +1,42 @@
 import random
-from animals import Empty
+from animals import FantomAnimal
 from animals import Plankton
 from animals import Killerwhale
 from animals import Shark
 from animals import Dolphin
-from living import Living
 from living import Animals
+from living import AnimalsType
 import string
 
 
-class God:
+class OceanController:
     def __init__(self, size: int):
         self.n: int = size
 
     def init(self, paramOcean: [[]], planktonNumber: int, dolphinNumber: int, sharkNumber: int, killerwhaleNumber: int) -> None:
         for i in range(0, self.n):
             for j in range(0, self.n):
-                paramOcean[i][j] = Empty(i, j)
+                paramOcean[i][j] = FantomAnimal(i, j)
 
         x = random.randrange(1, self.n)
         y = random.randrange(1, self.n)
         for i in range(0, planktonNumber + 1):
-            while paramOcean[x][y].getType() != Animals.EMPTY:
+            while paramOcean[x][y].getType() != AnimalsType.EMPTY:
                 x = random.randrange(1, self.n)
                 y = random.randrange(1, self.n)
             paramOcean[x][y] = Plankton(x, y, 2, 0)
         for i in range(0, dolphinNumber + 1):
-            while paramOcean[x][y].getType() != Animals.EMPTY:
+            while paramOcean[x][y].getType() != AnimalsType.EMPTY:
                 x = random.randrange(1, self.n)
                 y = random.randrange(1, self.n)
             paramOcean[x][y] = Dolphin(x, y, 4, True, 0)
         for i in range(0, sharkNumber + 1):
-            while paramOcean[x][y].getType() != Animals.EMPTY:
+            while paramOcean[x][y].getType() != AnimalsType.EMPTY:
                 x = random.randrange(1, self.n)
                 y = random.randrange(1, self.n)
             paramOcean[x][y] = Shark(x, y, 5, True, 0)
         for i in range(0, killerwhaleNumber + 1):
-            while paramOcean[x][y].getType() != Animals.EMPTY:
+            while paramOcean[x][y].getType() != AnimalsType.EMPTY:
                 x = random.randrange(1, self.n)
                 y = random.randrange(1, self.n)
             paramOcean[x][y] = Killerwhale(x, y, 6, True, 0)
@@ -57,15 +57,15 @@ class God:
     def showOcean(self, paramOcean: []) -> None:
         for i in range(1, self.n - 1):
             for j in range(1, self.n - 1):
-                if paramOcean[i][j].getType() == Animals.EMPTY:
+                if paramOcean[i][j].getType() == AnimalsType.EMPTY:
                     print("E", end=" ")
-                if paramOcean[i][j].getType() == Animals.plankton:
+                if paramOcean[i][j].getType() == AnimalsType.PLANKTON:
                     print("P", end=" ")
-                if paramOcean[i][j].getType() == Animals.dolphin:
+                if paramOcean[i][j].getType() == AnimalsType.DOLPHIN:
                     print("D", end=" ")
-                if paramOcean[i][j].getType() == Animals.shark:
+                if paramOcean[i][j].getType() == AnimalsType.SHARK:
                     print("S", end=" ")
-                if paramOcean[i][j].getType() == Animals.killerwhale:
+                if paramOcean[i][j].getType() == AnimalsType.KILLERWHALE:
                     print("K", end=" ")
             print()
 
@@ -160,4 +160,4 @@ class God:
         y = int(input("input y "))
         while y < 1 or y > self.n - 2:
             y = int(input("try more "))
-        ocean[x][y] = Empty(x, y)
+        ocean[x][y] = FantomAnimal(x, y)

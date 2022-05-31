@@ -1,10 +1,10 @@
-from living import Living
 from living import Animals
+from living import AnimalsType
 import numpy as np
 import random
 
 
-class Dolphin(Living):
+class Dolphin(Animals):
     def __init__(self, row: int, column: int, HP: int, male: bool, age: int):
         self.x = row
         self.y = column
@@ -12,12 +12,12 @@ class Dolphin(Living):
         self.male = male
         self.age = age
 
-    def getType(self) -> Animals:
-        return Animals.dolphin
+    def getType(self) -> AnimalsType:
+        return AnimalsType.DOLPHIN
 
     def death(self, ocean: []) -> []:
         if ocean[self.x][self.y].getHp() == 0 or ocean[self.x][self.y].getAge() == 4:
-            return [Empty(self.x, self.y)]
+            return [FantomAnimal(self.x, self.y)]
         return []
 
     def giveLife(self, ocean: []) -> []:
@@ -27,46 +27,46 @@ class Dolphin(Living):
         answer = []
         tempX: int = random.randrange(-1, 2)
         tempY: int = random.randrange(-1, 2)
-        if ocean[self.x][self.y].getMale():
+        if ocean[self.x][self.y].getSex():
             male = True
         else:
             female = True
         self.sum(ocean, sm)
-        if sm[Animals.dolphin.value] >= 2:
+        if sm[AnimalsType.DOLPHIN.value] >= 2:
             for i in range(-1, 2):
                 for j in range(-1, 2):
-                    if ocean[self.x + i][self.y + j].getType() == Animals.dolphin and ocean[self.x + i][
-                        self.y + j].getMale():
+                    if ocean[self.x + i][self.y + j].getType() == AnimalsType.DOLPHIN and ocean[self.x + i][
+                        self.y + j].getSex():
                         male = True
-                    if ocean[self.x + i][self.y + j].getType() == Animals.dolphin and ocean[self.x + i][
-                        self.y + j].getMale() != True:
+                    if ocean[self.x + i][self.y + j].getType() == AnimalsType.DOLPHIN and ocean[self.x + i][
+                        self.y + j].getSex() != True:
                         female = True
             if female and male:
-                if sm[Animals.EMPTY.value] > 0:
+                if sm[AnimalsType.EMPTY.value] > 0:
                     while ocean[self.x + tempX][
-                        self.y + tempY].getType() != Animals.EMPTY or self.x + tempX == 0 or self.x + tempX == self.n - 1 or self.y + tempY == 0 or self.y + tempY == self.n - 1:
+                        self.y + tempY].getType() != AnimalsType.EMPTY or self.x + tempX == 0 or self.x + tempX == self.n - 1 or self.y + tempY == 0 or self.y + tempY == self.n - 1:
                         tempX = random.randrange(-1, 2)
                         tempY = random.randrange(-1, 2)
 
-                    answer.append(Dolphin(self.x + tempX, self.y + tempY, 4, self.randomMale(), 0))
+                    answer.append(Dolphin(self.x + tempX, self.y + tempY, 4, self.randomSex(), 0))
                     answer.append(
-                        Dolphin(self.x, self.y, ocean[self.x][self.y].getHp() - 1, ocean[self.x][self.y].getMale(),
+                        Dolphin(self.x, self.y, ocean[self.x][self.y].getHp() - 1, ocean[self.x][self.y].getSex(),
                                 ocean[self.x][self.y].getAge() + 1))
                     return answer
-                if sm[Animals.EMPTY.value] == 0:
-                    if sm[Animals.plankton.value] > 0:
+                if sm[AnimalsType.EMPTY.value] == 0:
+                    if sm[AnimalsType.PLANKTON.value] > 0:
                         while ocean[self.x + tempX][
-                            self.y + tempY].getType() != Animals.plankton or self.x + tempX == 0 or self.x + tempX == self.n - 1 or self.y + tempY == 0 or self.y + tempY == self.n - 1:
+                            self.y + tempY].getType() != AnimalsType.PLANKTON or self.x + tempX == 0 or self.x + tempX == self.n - 1 or self.y + tempY == 0 or self.y + tempY == self.n - 1:
                             tempX = random.randrange(-1, 2)
                             tempY = random.randrange(-1, 2)
-                        if ocean[self.x + tempX][self.y + tempY].getType() == Animals.plankton:
-                            answer.append(Dolphin(self.x + tempX, self.y + tempY, 4, self.randomMale(), 0))
+                        if ocean[self.x + tempX][self.y + tempY].getType() == AnimalsType.PLANKTON:
+                            answer.append(Dolphin(self.x + tempX, self.y + tempY, 4, self.randomSex(), 0))
                             answer.append(Dolphin(self.x, self.y, ocean[self.x][self.y].getHp() + 1,
-                                                  ocean[self.x][self.y].getMale(), ocean[self.x][self.y].getAge() + 1))
+                                                  ocean[self.x][self.y].getSex(), ocean[self.x][self.y].getAge() + 1))
                             return answer
-                    if sm[Animals.plankton.value] == 0:
+                    if sm[AnimalsType.PLANKTON.value] == 0:
                         answer.append(
-                            Dolphin(self.x, self.y, ocean[self.x][self.y].getHp() + 2, ocean[self.x][self.y].getMale(),
+                            Dolphin(self.x, self.y, ocean[self.x][self.y].getHp() + 2, ocean[self.x][self.y].getSex(),
                                     ocean[self.x][self.y].getAge() + 1))
                         return answer
         return []
@@ -76,32 +76,32 @@ class Dolphin(Living):
         tempX: int = random.randrange(-1, 2)
         tempY: int = random.randrange(-1, 2)
         while ocean[self.x + tempX][
-            self.y + tempY].getType() == Animals.dolphin or self.x + tempX == 0 or self.x + tempX == self.n - 1 or self.y + tempY == self.n - 1 or self.y + tempY == 0:
+            self.y + tempY].getType() == AnimalsType.DOLPHIN or self.x + tempX == 0 or self.x + tempX == self.n - 1 or self.y + tempY == self.n - 1 or self.y + tempY == 0:
             tempX = random.randrange(-1, 2)
             tempY = random.randrange(-1, 2)
-        if ocean[self.x + tempX][self.y + tempY].getType() == Animals.EMPTY:
+        if ocean[self.x + tempX][self.y + tempY].getType() == AnimalsType.EMPTY:
             answer.append(Dolphin(self.x + tempX, self.y + tempY, ocean[self.x][self.y].getHp() - 1,
-                                  ocean[self.x][self.y].getMale(), ocean[self.x][self.y].getAge() + 1))
-            answer.append(Empty(self.x, self.y))
+                                  ocean[self.x][self.y].getSex(), ocean[self.x][self.y].getAge() + 1))
+            answer.append(FantomAnimal(self.x, self.y))
             return answer
-        if ocean[self.x + tempX][self.y + tempY].getType() == Animals.plankton:
+        if ocean[self.x + tempX][self.y + tempY].getType() == AnimalsType.PLANKTON:
             answer.append(Dolphin(self.x + tempX, self.y + tempY, ocean[self.x][self.y].getHp() + 1,
-                                  ocean[self.x][self.y].getMale(), ocean[self.x][self.y].getAge() + 1))
-            answer.append(Empty(self.x, self.y))
+                                  ocean[self.x][self.y].getSex(), ocean[self.x][self.y].getAge() + 1))
+            answer.append(FantomAnimal(self.x, self.y))
             return answer
-        if ocean[self.x + tempX][self.y + tempY].getType() == Animals.shark:
+        if ocean[self.x + tempX][self.y + tempY].getType() == AnimalsType.SHARK:
             answer.append(Shark(self.x + tempX, self.y + tempY, ocean[self.x + tempX][self.y + tempY].getHp() + 2,
-                                ocean[self.x + tempX][self.y + tempY].getMale(),
+                                ocean[self.x + tempX][self.y + tempY].getSex(),
                                 ocean[self.x + tempX][self.y + tempY].getAge()))
-            answer.append(Empty(self.x, self.y))
+            answer.append(FantomAnimal(self.x, self.y))
             return answer
-        if ocean[self.x + tempX][self.y + tempY].getType() == Animals.killerwhale:
+        if ocean[self.x + tempX][self.y + tempY].getType() == AnimalsType.KILLERWHALE:
             answer.append(Killerwhale(self.x + tempX, self.y + tempY, ocean[self.x + tempX][self.y + tempY].getHp() + 2,
-                                      ocean[self.x + tempX][self.y + tempY].getMale(),
+                                      ocean[self.x + tempX][self.y + tempY].getSex(),
                                       ocean[self.x + tempX][self.y + tempY].getAge()))
-            answer.append(Empty(self.x, self.y))
+            answer.append(FantomAnimal(self.x, self.y))
             return answer
-        answer.append(Dolphin(self.x, self.y, ocean[self.x][self.y].getHp() - 1, ocean[self.x][self.y].getMale(),
+        answer.append(Dolphin(self.x, self.y, ocean[self.x][self.y].getHp() - 1, ocean[self.x][self.y].getSex(),
                               ocean[self.x][self.y].getAge() + 1))
         return answer
 
@@ -118,79 +118,79 @@ class Dolphin(Living):
             return answer
 
 
-class Empty(Living):
+class FantomAnimal(Animals):
     def __init__(self, row: int, column: int):
         self.x = row
         self.y = column
 
-    def getType(self) -> Animals:
-        return Animals.EMPTY
+    def getType(self) -> AnimalsType:
+        return AnimalsType.EMPTY
 
     def next(self, ocean: [[]]) -> []:
         answer = []
         sm = np.zeros(5)
         self.sum(ocean, sm)
-        if sm[Animals.killerwhale.value] >= 1:
+        if sm[AnimalsType.KILLERWHALE.value] >= 1:
             toFind = np.zeros(5)
-            toFind[Animals.dolphin.value] = toFind[Animals.plankton.value] = toFind[Animals.EMPTY.value] = toFind[
-                Animals.shark.value] = 0
-            toFind[Animals.killerwhale.value] = 1
+            toFind[AnimalsType.DOLPHIN.value] = toFind[AnimalsType.PLANKTON.value] = toFind[AnimalsType.EMPTY.value] = toFind[
+                AnimalsType.SHARK.value] = 0
+            toFind[AnimalsType.KILLERWHALE.value] = 1
             coords: [] = self.position(ocean, toFind)
             tempX: int = coords[0]
             tempY: int = coords[1]
             answer.append(Killerwhale(self.x, self.y, ocean[self.x + tempX][self.y + tempY].getHp() - 1,
-                                      ocean[self.x + tempX][self.y + tempY].getMale(),
+                                      ocean[self.x + tempX][self.y + tempY].getSex(),
                                       ocean[self.x + tempX][self.y + tempY].getAge() + 1))
-            answer.append(Empty(self.x + tempX, self.y + tempY))
+            answer.append(FantomAnimal(self.x + tempX, self.y + tempY))
             return answer
         else:
-            if sm[Animals.shark.value] >= 1:
+            if sm[AnimalsType.SHARK.value] >= 1:
                 toFind = np.zeros(5)
-                toFind[Animals.dolphin.value] = toFind[Animals.plankton.value] = toFind[Animals.EMPTY.value] = toFind[
-                    Animals.killerwhale.value] = 0
-                toFind[Animals.shark.value] = 1
+                toFind[AnimalsType.DOLPHIN.value] = toFind[AnimalsType.PLANKTON.value] = toFind[AnimalsType.EMPTY.value] = toFind[
+                    AnimalsType.KILLERWHALE.value] = 0
+                toFind[AnimalsType.SHARK.value] = 1
                 coords: [] = self.position(ocean, toFind)
                 tempX: int = coords[0]
                 tempY: int = coords[1]
                 answer.append(Shark(self.x, self.y, ocean[self.x + tempX][self.y + tempY].getHp() - 1,
-                                    ocean[self.x + tempX][self.y + tempY].getMale(),
+                                    ocean[self.x + tempX][self.y + tempY].getSex(),
                                     ocean[self.x + tempX][self.y + tempY].getAge() + 1))
-                answer.append(Empty(self.x + tempX, self.y + tempY))
+                answer.append(FantomAnimal(self.x + tempX, self.y + tempY))
                 return answer
 
             else:
-                if sm[Animals.dolphin.value] >= 1:
+                if sm[AnimalsType.DOLPHIN.value] >= 1:
                     toFind = np.zeros(5)
-                    toFind[Animals.shark.value] = toFind[Animals.plankton.value] = toFind[Animals.EMPTY.value] = toFind[
-                        Animals.killerwhale.value] = 0
-                    toFind[Animals.dolphin.value] = 1
+                    toFind[AnimalsType.SHARK.value] = toFind[AnimalsType.PLANKTON.value] = toFind[AnimalsType.EMPTY.value] = toFind[
+                        AnimalsType.KILLERWHALE.value] = 0
+                    toFind[AnimalsType.DOLPHIN.value] = 1
                     coords: [] = self.position(ocean, toFind)
                     tempX: int = coords[0]
                     tempY: int = coords[1]
                     answer.append(Dolphin(self.x, self.y, ocean[self.x + tempX][self.y + tempY].getHp() - 1,
-                                          ocean[self.x + tempX][self.y + tempY].getMale(),
+                                          ocean[self.x + tempX][self.y + tempY].getSex(),
                                           ocean[self.x + tempX][self.y + tempY].getAge() + 1))
-                    answer.append(Empty(self.x + tempX, self.y + tempY))
+                    answer.append(FantomAnimal(self.x + tempX, self.y + tempY))
                     return answer
 
                 else:
-                    if sm[Animals.plankton.value] >= 1:
+                    if sm[AnimalsType.PLANKTON.value] >= 1:
                         toFind = np.zeros(5)
-                        toFind[Animals.dolphin.value] = toFind[Animals.killerwhale.value] = toFind[
-                            Animals.EMPTY.value] = toFind[
-                            Animals.shark.value] = 0
-                        toFind[Animals.plankton.value] = 1
+                        toFind[AnimalsType.DOLPHIN.value] = toFind[AnimalsType.KILLERWHALE.value] = toFind[
+                            AnimalsType.EMPTY.value] = toFind[
+                            AnimalsType.SHARK.value] = 0
+                        toFind[AnimalsType.PLANKTON.value] = 1
                         coords: [] = self.position(ocean, toFind)
                         tempX: int = coords[0]
                         tempY: int = coords[1]
                         answer.append(Plankton(self.x, self.y, ocean[self.x + tempX][self.y + tempY].getHp() - 1,
                                                ocean[self.x + tempX][self.y + tempY].getAge() + 1))
-                        answer.append(Empty(self.x + tempX, self.y + tempY))
+                        answer.append(FantomAnimal(self.x + tempX, self.y + tempY))
                         return answer
-        return [Empty(self.x, self.y)]
+        return [FantomAnimal(self.x, self.y)]
 
 
-class Killerwhale(Living):
+class Killerwhale(Animals):
     def __init__(self, row: int, column: int, HP: int, male: bool, age: int):
         self.x = row
         self.y = column
@@ -198,8 +198,8 @@ class Killerwhale(Living):
         self.male = male
         self.age = age
 
-    def getType(self) -> Animals:
-        return Animals.killerwhale
+    def getType(self) -> AnimalsType:
+        return AnimalsType.KILLERWHALE
 
     def giveLife(self, ocean: []) -> []:
         male: bool = False
@@ -208,55 +208,55 @@ class Killerwhale(Living):
         answer = []
         tempX: int = random.randrange(-1, 2)
         tempY: int = random.randrange(-1, 2)
-        if ocean[self.x][self.y].getMale():
+        if ocean[self.x][self.y].getSex():
             male = True
         else:
             female = True
         self.sum(ocean, sm)
-        if sm[Animals.killerwhale.value] >= 2:
+        if sm[AnimalsType.KILLERWHALE.value] >= 2:
             for i in range(-1, 2):
                 for j in range(-1, 2):
-                    if ocean[self.x + i][self.y + j].getType() == Animals.killerwhale and ocean[self.x + i][
-                        self.y + j].getMale():
+                    if ocean[self.x + i][self.y + j].getType() == AnimalsType.KILLERWHALE and ocean[self.x + i][
+                        self.y + j].getSex():
                         male = True
-                    if ocean[self.x + i][self.y + j].getType() == Animals.killerwhale and ocean[self.x + i][
-                        self.y + j].getMale() != True:
+                    if ocean[self.x + i][self.y + j].getType() == AnimalsType.KILLERWHALE and ocean[self.x + i][
+                        self.y + j].getSex() != True:
                         female = True
             if female and male:
-                if sm[Animals.EMPTY.value] > 0:
+                if sm[AnimalsType.EMPTY.value] > 0:
                     while ocean[self.x + tempX][
-                        self.y + tempY].getType() != Animals.EMPTY or self.x + tempX == 0 or self.x + tempX == self.n - 1 or self.y + tempY == 0 or self.y + tempY == self.n - 1:
+                        self.y + tempY].getType() != AnimalsType.EMPTY or self.x + tempX == 0 or self.x + tempX == self.n - 1 or self.y + tempY == 0 or self.y + tempY == self.n - 1:
                         tempX = random.randrange(-1, 2)
                         tempY = random.randrange(-1, 2)
 
-                    answer.append(Killerwhale(self.x + tempX, self.y + tempY, 6, self.randomMale(), 0))
+                    answer.append(Killerwhale(self.x + tempX, self.y + tempY, 6, self.randomSex(), 0))
                     answer.append(
-                        Killerwhale(self.x, self.y, ocean[self.x][self.y].getHp() - 1, ocean[self.x][self.y].getMale(),
+                        Killerwhale(self.x, self.y, ocean[self.x][self.y].getHp() - 1, ocean[self.x][self.y].getSex(),
                                     ocean[self.x][self.y].getAge() + 1))
                     return answer
-                if sm[Animals.EMPTY.value] == 0:
+                if sm[AnimalsType.EMPTY.value] == 0:
                     toFind = np.zeros(5)
-                    if sm[Animals.plankton.value] + sm[Animals.dolphin.value] > 0:
+                    if sm[AnimalsType.PLANKTON.value] + sm[AnimalsType.DOLPHIN.value] > 0:
                         while ocean[self.x + tempX][
-                            self.y + tempY].getType() == Animals.killerwhale or self.x + tempX == 0 or self.x + tempX == self.n - 1 or self.y + tempY == 0 or self.y + tempY == self.n - 1:
+                            self.y + tempY].getType() == AnimalsType.KILLERWHALE or self.x + tempX == 0 or self.x + tempX == self.n - 1 or self.y + tempY == 0 or self.y + tempY == self.n - 1:
                             tempX = random.randrange(-1, 2)
                             tempY = random.randrange(-1, 2)
-                        if ocean[self.x + tempX][self.y + tempY].getType() == Animals.plankton:
-                            answer.append(Killerwhale(self.x + tempX, self.y + tempY, 6, self.randomMale(), 0))
+                        if ocean[self.x + tempX][self.y + tempY].getType() == AnimalsType.PLANKTON:
+                            answer.append(Killerwhale(self.x + tempX, self.y + tempY, 6, self.randomSex(), 0))
                             answer.append(Killerwhale(self.x, self.y, ocean[self.x][self.y].getHp() + 1,
-                                                      ocean[self.x][self.y].getMale(),
+                                                      ocean[self.x][self.y].getSex(),
                                                       ocean[self.x][self.y].getAge() + 1))
                             return answer
-                        if ocean[self.x + tempX][self.y + tempY].getType() == Animals.dolphin:
-                            answer.append(Killerwhale(self.x + tempX, self.y + tempY, 6, self.randomMale(), 0))
+                        if ocean[self.x + tempX][self.y + tempY].getType() == AnimalsType.DOLPHIN:
+                            answer.append(Killerwhale(self.x + tempX, self.y + tempY, 6, self.randomSex(), 0))
                             answer.append(Killerwhale(self.x, self.y, ocean[self.x][self.y].getHp() + 2,
-                                                      ocean[self.x][self.y].getMale(),
+                                                      ocean[self.x][self.y].getSex(),
                                                       ocean[self.x][self.y].getAge() + 1))
                             return answer
-                        if ocean[self.x + tempX][self.y + tempY].getType() == Animals.shark:
-                            answer.append(Killerwhale(self.x + tempX, self.y + tempY, 6, self.randomMale(), 0))
+                        if ocean[self.x + tempX][self.y + tempY].getType() == AnimalsType.SHARK:
+                            answer.append(Killerwhale(self.x + tempX, self.y + tempY, 6, self.randomSex(), 0))
                             answer.append(Killerwhale(self.x, self.y, ocean[self.x][self.y].getHp() + 3,
-                                                      ocean[self.x][self.y].getMale(),
+                                                      ocean[self.x][self.y].getSex(),
                                                       ocean[self.x][self.y].getAge() + 1))
                             return answer
         return []
@@ -268,38 +268,38 @@ class Killerwhale(Living):
         tempY: int = random.randrange(-1, 2)
         self.sum(ocean, sm)
         while ocean[self.x + tempX][
-            self.y + tempY].getType() == Animals.killerwhale or self.x + tempX == 0 or self.x + tempX == self.n - 1 or self.y + tempY == self.n - 1 or self.y + tempY == 0:
+            self.y + tempY].getType() == AnimalsType.KILLERWHALE or self.x + tempX == 0 or self.x + tempX == self.n - 1 or self.y + tempY == self.n - 1 or self.y + tempY == 0:
             tempX: int = random.randrange(-1, 2)
             tempY: int = random.randrange(-1, 2)
-        if ocean[self.x + tempX][self.y + tempY].getType() == Animals.EMPTY:
+        if ocean[self.x + tempX][self.y + tempY].getType() == AnimalsType.EMPTY:
             answer.append(Killerwhale(self.x + tempX, self.y + tempY, ocean[self.x][self.y].getHp() - 1,
-                                      ocean[self.x][self.y].getMale(), ocean[self.x][self.y].getAge() + 1))
-            answer.append(Empty(self.x, self.y))
+                                      ocean[self.x][self.y].getSex(), ocean[self.x][self.y].getAge() + 1))
+            answer.append(FantomAnimal(self.x, self.y))
             return answer
-        if ocean[self.x + tempX][self.y + tempY].getType() == Animals.plankton:
+        if ocean[self.x + tempX][self.y + tempY].getType() == AnimalsType.PLANKTON:
             answer.append(Killerwhale(self.x + tempX, self.y + tempY, ocean[self.x][self.y].getHp() + 1,
-                                      ocean[self.x][self.y].getMale(), ocean[self.x][self.y].getAge() + 1))
-            answer.append(Empty(self.x, self.y))
+                                      ocean[self.x][self.y].getSex(), ocean[self.x][self.y].getAge() + 1))
+            answer.append(FantomAnimal(self.x, self.y))
             return answer
-        if ocean[self.x + tempX][self.y + tempY].getType() == Animals.dolphin:
+        if ocean[self.x + tempX][self.y + tempY].getType() == AnimalsType.DOLPHIN:
             answer.append(Killerwhale(self.x + tempX, self.y + tempY, ocean[self.x + tempX][self.y + tempY].getHp() + 2,
-                                      ocean[self.x + tempX][self.y + tempY].getMale(),
+                                      ocean[self.x + tempX][self.y + tempY].getSex(),
                                       ocean[self.x + tempX][self.y + tempY].getAge() + 1))
-            answer.append(Empty(self.x, self.y))
+            answer.append(FantomAnimal(self.x, self.y))
             return answer
-        if ocean[self.x + tempX][self.y + tempY].getType() == Animals.shark:
+        if ocean[self.x + tempX][self.y + tempY].getType() == AnimalsType.SHARK:
             answer.append(Killerwhale(self.x + tempX, self.y + tempY, ocean[self.x + tempX][self.y + tempY].getHp() + 3,
-                                      ocean[self.x + tempX][self.y + tempY].getMale(),
+                                      ocean[self.x + tempX][self.y + tempY].getSex(),
                                       ocean[self.x + tempX][self.y + tempY].getAge() + 1))
-            answer.append(Empty(self.x, self.y))
+            answer.append(FantomAnimal(self.x, self.y))
             return answer
-        answer.append(Killerwhale(self.x, self.y, ocean[self.x][self.y].getHp() - 1, ocean[self.x][self.y].getMale(),
+        answer.append(Killerwhale(self.x, self.y, ocean[self.x][self.y].getHp() - 1, ocean[self.x][self.y].getSex(),
                                   ocean[self.x][self.y].getAge() + 1))
         return answer
 
     def death(self, ocean: []) -> []:
         if ocean[self.x][self.y].getHp() == 0 or ocean[self.x][self.y].getAge() == 6:
-            return [Empty(self.x, self.y)]
+            return [FantomAnimal(self.x, self.y)]
 
     def next(self, ocean: []) -> []:
         answer = []
@@ -314,15 +314,15 @@ class Killerwhale(Living):
             return answer
 
 
-class Plankton(Living):
+class Plankton(Animals):
     def __init__(self, row: int, column: int, HP: int, age: int):
         self.x = row
         self.y = column
         self.hp = HP
         self.age = age
 
-    def getType(self) -> Animals:
-        return Animals.plankton
+    def getType(self) -> AnimalsType:
+        return AnimalsType.PLANKTON
 
     def giveLife(self, ocean: [[]]) -> []:
         sm = np.zeros(5)
@@ -330,12 +330,12 @@ class Plankton(Living):
         self.sum(ocean, sm)
         tempX: int = random.randrange(-1, 2)
         tempY: int = random.randrange(-1, 2)
-        if sm[Animals.EMPTY.value] > 0:
+        if sm[AnimalsType.EMPTY.value] > 0:
             while ocean[self.x + tempX][
-                self.y + tempY].getType() != Animals.EMPTY or self.x + tempX == 0 or self.x + tempX == self.n - 1 or self.y + tempY == self.n - 1 or self.y + tempY == 0:
+                self.y + tempY].getType() != AnimalsType.EMPTY or self.x + tempX == 0 or self.x + tempX == self.n - 1 or self.y + tempY == self.n - 1 or self.y + tempY == 0:
                 tempX: int = random.randrange(-1, 2)
                 tempY: int = random.randrange(-1, 2)
-            if ocean[self.x + tempX][self.y + tempY].getType() == Animals.EMPTY:
+            if ocean[self.x + tempX][self.y + tempY].getType() == AnimalsType.EMPTY:
                 answer.append(Plankton(self.x + tempX, self.y + tempY, 2, 0))
                 answer.append(
                     Plankton(self.x, self.y, ocean[self.x][self.y].getHp(), ocean[self.x][self.y].getAge() + 1))
@@ -349,28 +349,28 @@ class Plankton(Living):
         while self.x + tempX == 0 or self.x + tempX == self.n - 1 or self.y + tempY == self.n - 1 or self.y + tempY == 0:
             tempX: int = random.randrange(-1, 2)
             tempY: int = random.randrange(-1, 2)
-        if ocean[self.x + tempX][self.y + tempY].getType() != Animals.EMPTY:
-            if ocean[self.x + tempX][self.y + tempY].getType() == Animals.dolphin:
+        if ocean[self.x + tempX][self.y + tempY].getType() != AnimalsType.EMPTY:
+            if ocean[self.x + tempX][self.y + tempY].getType() == AnimalsType.DOLPHIN:
                 answer.append(Dolphin(self.x + tempX, self.y + tempY, ocean[self.x + tempX][self.y + tempY].getHp() + 1,
-                                      ocean[self.x + tempX][self.y + tempY].getMale(),
+                                      ocean[self.x + tempX][self.y + tempY].getSex(),
                                       ocean[self.x + tempX][self.y + tempY].getAge()))
-            if ocean[self.x + tempX][self.y + tempY].getType() == Animals.shark:
+            if ocean[self.x + tempX][self.y + tempY].getType() == AnimalsType.SHARK:
                 answer.append(Shark(self.x + tempX, self.y + tempY, ocean[self.x + tempX][self.y + tempY].getHp() + 1,
-                                    ocean[self.x + tempX][self.y + tempY].getMale(),
+                                    ocean[self.x + tempX][self.y + tempY].getSex(),
                                     ocean[self.x + tempX][self.y + tempY].getAge()))
-            if ocean[self.x + tempX][self.y + tempY].getType() == Animals.killerwhale:
+            if ocean[self.x + tempX][self.y + tempY].getType() == AnimalsType.KILLERWHALE:
                 answer.append(
                     Killerwhale(self.x + tempX, self.y + tempY, ocean[self.x + tempX][self.y + tempY].getHp() + 1,
-                                ocean[self.x + tempX][self.y + tempY].getMale(),
+                                ocean[self.x + tempX][self.y + tempY].getSex(),
                                 ocean[self.x + tempX][self.y + tempY].getAge()))
-            answer.append(Empty(self.x, self.y))
+            answer.append(FantomAnimal(self.x, self.y))
             return answer
-        answer.append(Empty(self.x, self.y))
+        answer.append(FantomAnimal(self.x, self.y))
         return answer
 
     def death(self, ocean: [[]]) -> []:
         if ocean[self.x][self.y].getAge() == 2 or ocean[self.x][self.y].getHp() == 0:
-            return [Empty(self.x, self.y)]
+            return [FantomAnimal(self.x, self.y)]
         return []
 
     def next(self, ocean: [[]]) -> []:
@@ -386,7 +386,7 @@ class Plankton(Living):
             return answer
 
 
-class Shark(Living):
+class Shark(Animals):
     def __init__(self, row: int, column: int, HP: int, male: bool, age: int):
         self.x = row
         self.y = column
@@ -394,8 +394,8 @@ class Shark(Living):
         self.male = male
         self.age = age
 
-    def getType(self) -> Animals:
-        return Animals.shark
+    def getType(self) -> AnimalsType:
+        return AnimalsType.SHARK
 
     def giveLife(self, ocean: []) -> []:
         male: bool = False
@@ -404,52 +404,52 @@ class Shark(Living):
         answer = []
         tempX: int = random.randrange(-1, 2)
         tempY: int = random.randrange(-1, 2)
-        if ocean[self.x][self.y].getMale():
+        if ocean[self.x][self.y].getSex():
             male = True
         else:
             female = True
-        Living.sum(self, ocean, sm)
-        if sm[Animals.shark.value] >= 2:
+        Animals.sum(self, ocean, sm)
+        if sm[AnimalsType.SHARK.value] >= 2:
             for i in range(-1, 2):
                 for j in range(-1, 2):
-                    if ocean[self.x + i][self.y + j].getType() == Animals.shark and ocean[self.x + i][
-                        self.y + j].getMale():
+                    if ocean[self.x + i][self.y + j].getType() == AnimalsType.SHARK and ocean[self.x + i][
+                        self.y + j].getSex():
                         male = True
-                    if ocean[self.x + i][self.y + j].getType() == Animals.shark and ocean[self.x + i][
-                        self.y + j].getMale() != True:
+                    if ocean[self.x + i][self.y + j].getType() == AnimalsType.SHARK and ocean[self.x + i][
+                        self.y + j].getSex() != True:
                         female = True
             if female and male:
-                if sm[Animals.EMPTY.value] > 0:
+                if sm[AnimalsType.EMPTY.value] > 0:
                     while ocean[self.x + tempX][
-                        self.y + tempY].getType() != Animals.EMPTY or self.x + tempX == 0 or self.x + tempX == self.n - 1 or self.y + tempY == 0 or self.y + tempY == self.n - 1:
+                        self.y + tempY].getType() != AnimalsType.EMPTY or self.x + tempX == 0 or self.x + tempX == self.n - 1 or self.y + tempY == 0 or self.y + tempY == self.n - 1:
                         tempX = random.randrange(-1, 2)
                         tempY = random.randrange(-1, 2)
-                    answer.append(Shark(self.x + tempX, self.y + tempY, 5, self.randomMale(), 0))
+                    answer.append(Shark(self.x + tempX, self.y + tempY, 5, self.randomSex(), 0))
                     answer.append(
-                        Shark(self.x, self.y, ocean[self.x][self.y].getHp() - 1, ocean[self.x][self.y].getMale(),
+                        Shark(self.x, self.y, ocean[self.x][self.y].getHp() - 1, ocean[self.x][self.y].getSex(),
                               ocean[self.x][self.y].getAge() + 1))
                     return answer
-                if sm[Animals.EMPTY.value] == 0:
+                if sm[AnimalsType.EMPTY.value] == 0:
                     toFind = np.zeros(5)
-                    if sm[Animals.plankton.value] + sm[Animals.dolphin.value] > 0:
+                    if sm[AnimalsType.PLANKTON.value] + sm[AnimalsType.DOLPHIN.value] > 0:
                         while ocean[self.x + tempX][
-                            self.y + tempY].getType() == Animals.killerwhale or ocean[self.x + tempX][
-                            self.y + tempY].getType() == Animals.shark or self.x + tempX == 0 or self.x + tempX == self.n - 1 or self.y + tempY == 0 or self.y + tempY == self.n - 1:
+                            self.y + tempY].getType() == AnimalsType.KILLERWHALE or ocean[self.x + tempX][
+                            self.y + tempY].getType() == AnimalsType.SHARK or self.x + tempX == 0 or self.x + tempX == self.n - 1 or self.y + tempY == 0 or self.y + tempY == self.n - 1:
                             tempX = random.randrange(-1, 2)
                             tempY = random.randrange(-1, 2)
-                        if ocean[self.x + tempX][self.y + tempY].getType() == Animals.plankton:
-                            answer.append(Shark(self.x + tempX, self.y + tempY, 5, self.randomMale(), 0))
+                        if ocean[self.x + tempX][self.y + tempY].getType() == AnimalsType.PLANKTON:
+                            answer.append(Shark(self.x + tempX, self.y + tempY, 5, self.randomSex(), 0))
                             answer.append(Shark(self.x, self.y, ocean[self.x][self.y].getHp() + 1,
-                                                ocean[self.x][self.y].getMale(), ocean[self.x][self.y].getAge() + 1))
+                                                ocean[self.x][self.y].getSex(), ocean[self.x][self.y].getAge() + 1))
                             return answer
-                        if ocean[self.x + tempX][self.y + tempY].getType() == Animals.dolphin:
-                            answer.append(Shark(self.x + tempX, self.y + tempY, 5, Living.randomMale(), 0))
+                        if ocean[self.x + tempX][self.y + tempY].getType() == AnimalsType.DOLPHIN:
+                            answer.append(Shark(self.x + tempX, self.y + tempY, 5, Animals.randomSex(), 0))
                             answer.append(Shark(self.x, self.y, ocean[self.x][self.y].getHp() + 2,
-                                                ocean[self.x][self.y].getMale(), ocean[self.x][self.y].getAge() + 1))
+                                                ocean[self.x][self.y].getSex(), ocean[self.x][self.y].getAge() + 1))
                             return answer
-                    if sm[Animals.plankton.value] + sm[Animals.dolphin.value] == 0:
+                    if sm[AnimalsType.PLANKTON.value] + sm[AnimalsType.DOLPHIN.value] == 0:
                         answer.append(
-                            Shark(self.x, self.y, ocean[self.x][self.y].getHp() + 3, ocean[self.x][self.y].getMale(),
+                            Shark(self.x, self.y, ocean[self.x][self.y].getHp() + 3, ocean[self.x][self.y].getSex(),
                                   ocean[self.x][self.y].getAge() + 1))
                         return answer
         return []
@@ -461,38 +461,38 @@ class Shark(Living):
         tempY: int = random.randrange(-1, 2)
         self.sum(ocean, sm)
         while ocean[self.x + tempX][
-            self.y + tempY].getType() == Animals.shark or self.x + tempX == 0 or self.x + tempX == self.n - 1 or self.y + tempY == self.n - 1 or self.y + tempY == 0:
+            self.y + tempY].getType() == AnimalsType.SHARK or self.x + tempX == 0 or self.x + tempX == self.n - 1 or self.y + tempY == self.n - 1 or self.y + tempY == 0:
             tempX = random.randrange(-1, 2)
             tempY = random.randrange(-1, 2)
-        if ocean[self.x + tempX][self.y + tempY].getType() == Animals.EMPTY:
+        if ocean[self.x + tempX][self.y + tempY].getType() == AnimalsType.EMPTY:
             answer.append(Shark(self.x + tempX, self.y + tempY, ocean[self.x][self.y].getHp() - 1,
-                                ocean[self.x][self.y].getMale(), ocean[self.x][self.y].getAge() + 1))
-            answer.append(Empty(self.x, self.y))
+                                ocean[self.x][self.y].getSex(), ocean[self.x][self.y].getAge() + 1))
+            answer.append(FantomAnimal(self.x, self.y))
             return answer
-        if ocean[self.x + tempX][self.y + tempY].getType() == Animals.plankton:
+        if ocean[self.x + tempX][self.y + tempY].getType() == AnimalsType.PLANKTON:
             answer.append(Shark(self.x + tempX, self.y + tempY, ocean[self.x][self.y].getHp() + 1,
-                                ocean[self.x][self.y].getMale(), ocean[self.x][self.y].getAge() + 1))
-            answer.append(Empty(self.x, self.y))
+                                ocean[self.x][self.y].getSex(), ocean[self.x][self.y].getAge() + 1))
+            answer.append(FantomAnimal(self.x, self.y))
             return answer
-        if ocean[self.x + tempX][self.y + tempY].getType() == Animals.dolphin:
+        if ocean[self.x + tempX][self.y + tempY].getType() == AnimalsType.DOLPHIN:
             answer.append(Shark(self.x + tempX, self.y + tempY, ocean[self.x + tempX][self.y + tempY].getHp() + 2,
-                                ocean[self.x + tempX][self.y + tempY].getMale(),
+                                ocean[self.x + tempX][self.y + tempY].getSex(),
                                 ocean[self.x + tempX][self.y + tempY].getAge() + 1))
-            answer.append(Empty(self.x, self.y))
+            answer.append(FantomAnimal(self.x, self.y))
             return answer
-        if ocean[self.x + tempX][self.y + tempY].getType() == Animals.killerwhale:
+        if ocean[self.x + tempX][self.y + tempY].getType() == AnimalsType.KILLERWHALE:
             answer.append(Killerwhale(self.x + tempX, self.y + tempY, ocean[self.x + tempX][self.y + tempY].getHp() + 3,
-                                      ocean[self.x + tempX][self.y + tempY].getMale(),
+                                      ocean[self.x + tempX][self.y + tempY].getSex(),
                                       ocean[self.x + tempX][self.y + tempY].getAge()))
-            answer.append(Empty(self.x, self.y))
+            answer.append(FantomAnimal(self.x, self.y))
             return answer
-        answer.append(Shark(self.x, self.y, ocean[self.x][self.y].getHp() - 1, ocean[self.x][self.y].getMale(),
+        answer.append(Shark(self.x, self.y, ocean[self.x][self.y].getHp() - 1, ocean[self.x][self.y].getSex(),
                             ocean[self.x][self.y].getAge() + 1))
         return answer
 
     def death(self, ocean: []) -> []:
         if ocean[self.x][self.y].getHp() == 0 or ocean[self.x][self.y].getAge() == 5:
-            return [Empty(self.x, self.y)]
+            return [FantomAnimal(self.x, self.y)]
         return []
 
     def next(self, ocean: []) -> []:
